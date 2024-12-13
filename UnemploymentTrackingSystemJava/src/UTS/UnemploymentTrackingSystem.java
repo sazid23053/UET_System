@@ -11,6 +11,7 @@ public class UnemploymentTrackingSystem {
     private static final String USERS_FILE = "users.txt";
     private static final String JOBS_FILE = "jobs.txt";
     private static final String TRAININGS_FILE = "trainings.txt";
+    private static Object applicationList;
 
     public static void main(String[] args) {
         ensureFileExists(USERS_FILE);
@@ -119,7 +120,8 @@ public class UnemploymentTrackingSystem {
         while (true) {
             System.out.println("\n1. Search Jobs");
             System.out.println("2. View Training Programs");
-            System.out.println("3. Logout");
+            System.out.println("3. Apply Job");
+            System.out.println("4. Logout");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -127,7 +129,8 @@ public class UnemploymentTrackingSystem {
             switch (choice) {
                 case 1 -> searchJobs();
                 case 2 -> viewTrainingPrograms();
-                case 3 -> {
+                case 3 -> applyForJob();
+                case 4 -> {
                     System.out.println("Logged out.");
                     return;
                 }
@@ -260,6 +263,15 @@ public class UnemploymentTrackingSystem {
             System.out.println("----------------------------");
         }
     }
+     private static void applyForJob() {
+    System.out.print("Enter Job ID to apply: ");
+    int jobId = scanner.nextInt();
+    scanner.nextLine(); 
+    System.out.print("Enter a cover letter (optional): ");
+    String coverLetter = scanner.nextLine();
+    System.out.println("Application submitted successfully!");
+}
+
 
     private static void loadUsersFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader(USERS_FILE))) {
@@ -339,4 +351,16 @@ public class UnemploymentTrackingSystem {
             System.out.println("Error saving training programs: " + e.getMessage());
         }
     }
+    private static void loadApplicationsFromFile() {
+        String APPLICATIONS_FILE = null;
+    try (BufferedReader reader = new BufferedReader(new FileReader(APPLICATIONS_FILE))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            applications.add(Application.fromString(line));
+        }
+    } catch (IOException e) {
+        System.out.println("Error loading applications: " + e.getMessage());
+    }
+}
+
 }
