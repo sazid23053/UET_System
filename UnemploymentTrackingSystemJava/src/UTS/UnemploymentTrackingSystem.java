@@ -120,7 +120,7 @@ public class UnemploymentTrackingSystem {
         while (true) {
             System.out.println("\n1. Search Jobs");
             System.out.println("2. View Training Programs");
-            System.out.println("3. Apply Job");
+            System.out.println("3. Apply for a Job");
             System.out.println("4. Logout");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
