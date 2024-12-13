@@ -12,7 +12,7 @@ public class UnemploymentTrackingSystem {
     private static final String USERS_FILE = "users.txt";
     private static final String JOBS_FILE = "jobs.txt";
     private static final String TRAININGS_FILE = "trainings.txt";
-    private static final String APPLICATIONS_FILE="application.txt";
+    private static final String APPLICATIONS_FILE = "applications.txt";
     public static void main(String[] args) {
         ensureFileExists(USERS_FILE);
         ensureFileExists(JOBS_FILE);
@@ -267,10 +267,8 @@ public class UnemploymentTrackingSystem {
     }
      private static void applyForJob() {
     System.out.print("Enter Job ID to apply: ");
-    int jobId = scanner.nextInt();
     scanner.nextLine(); 
     System.out.print("Enter a cover letter (optional): ");
-    String coverLetter = scanner.nextLine();
     System.out.println("Application submitted successfully!");
 }
 
@@ -300,8 +298,8 @@ public class UnemploymentTrackingSystem {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(USERS_FILE))) {
             for (User user : users) {
                 writer.write(user.getUserId() + "," + user.name + "," + user.email + "," + user.password + "," + user.getRole());
-                if (user instanceof Employer) {
-                    writer.write("," + ((Employer) user).getCompanyName());
+                if (user instanceof Employer employer) {
+                    writer.write("," + employer.getCompanyName());
                 }
                 writer.newLine();
             }
@@ -353,13 +351,24 @@ public class UnemploymentTrackingSystem {
             System.out.println("Error saving training programs: " + e.getMessage());
         }
     }
-    private static void loadApplicationsFromFile() {
-        String APPLICATIONS_FILE = null;
-    try (BufferedReader reader = new BufferedReader(new FileReader(APPLICATIONS_FILE))) {
+  private static void loadApplicationsFromFile() {
+    File file = new File(APPLICATIONS_FILE);
+    if (!file.exists()) {
+        try {
+            file.createNewFile();
+            System.out.println("File 'applications.txt' created.");
+        } catch (IOException e) {
+            System.out.println("Error creating file: " + e.getMessage());
+            return; // Exit the method if file creation fails
+        }
+    }
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
         String line;
         while ((line = reader.readLine()) != null) {
             applicationlist.add(Application.fromString(line));
         }
+        System.out.println("Applications loaded successfully.");
     } catch (IOException e) {
         System.out.println("Error loading applications: " + e.getMessage());
     }
