@@ -8,19 +8,20 @@ public class UnemploymentTrackingSystem {
     private static final List<User> users = new ArrayList<>();
     private static final List<JobPosting> jobList = new ArrayList<>();
     private static final List<TrainingProgram> trainingList = new ArrayList<>();
+    private static final List<Application> applicationlist = new ArrayList<>();
     private static final String USERS_FILE = "users.txt";
     private static final String JOBS_FILE = "jobs.txt";
     private static final String TRAININGS_FILE = "trainings.txt";
-    private static Object applicationList;
-
+    private static final String APPLICATIONS_FILE="application.txt";
     public static void main(String[] args) {
         ensureFileExists(USERS_FILE);
         ensureFileExists(JOBS_FILE);
         ensureFileExists(TRAININGS_FILE);
-
+        ensureFileExists(APPLICATIONS_FILE);
         loadUsersFromFile();
         loadJobsFromFile();
         loadTrainingsFromFile();
+        loadApplicationsFromFile();
 
         System.out.println("Welcome to the Unemployment Tracking System!");
 
@@ -39,6 +40,7 @@ public class UnemploymentTrackingSystem {
                     saveUsersToFile();
                     saveJobsToFile();
                     saveTrainingsToFile();
+                    saveApplicationsToFile();
                     System.out.println("Thank you for using the system!");
                     return;
                 }
@@ -356,11 +358,23 @@ public class UnemploymentTrackingSystem {
     try (BufferedReader reader = new BufferedReader(new FileReader(APPLICATIONS_FILE))) {
         String line;
         while ((line = reader.readLine()) != null) {
-            applications.add(Application.fromString(line));
+            applicationlist.add(Application.fromString(line));
         }
     } catch (IOException e) {
         System.out.println("Error loading applications: " + e.getMessage());
     }
 }
+    private static void saveApplicationsToFile() {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(APPLICATIONS_FILE))) {
+        for (Application app : applicationlist) {
+            writer.write(app.toString());
+            writer.newLine();
+        }
+        System.out.println("Applications saved successfully.");
+    } catch (IOException e) {
+        System.out.println("Error saving applications: " + e.getMessage());
+    }
+}
+
 
 }
